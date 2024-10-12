@@ -1,14 +1,18 @@
 <script setup>
 import { useRouter } from 'vue-router';
+import { ref } from "vue";
 import { generateQuizQuestions } from '~/utils/chatgpt.js';
 
 const router = useRouter();
 const { data, error } = await useFetch('/api/sampler');
+const doneFetching = ref(false);
+const knoptekst = ref("Bezig met laden...");
 
 import { store } from '~/store/store.js';
 
 const startGame = () => {
-  router.push('/step');
+  if (doneFetching.value == true)
+    router.push('/step');
 };
 
 onMounted(async () => {
@@ -22,6 +26,8 @@ onMounted(async () => {
   store.bibleTexts = bibleTexts;
 
   const result = await generateQuizQuestions(bibleTexts);
+  doneFetching.value = true
+  knoptekst.value = "Geef me een kersvers vers"
 
   store.questionsAndAnswers = result;
 });
@@ -38,9 +44,11 @@ onMounted(async () => {
     </p>
     <button
       @click="startGame"
-      class="bg-red-500 hover:bg-red-600 active:mt-1 active:border-b-0 focus:bg-red-600 mb-20 text-white border-b-4 border-red-700 font-bold py-3 px-5 rounded-xl"
-    >
-      Geef me een kersvers vers
+      class="active:mt-1 active:border-b-0 mb-20 text-white border-b-4 font-bold py-3 px-5 rounded-xl"
+            :class="{ 'bg-red-500': doneFetching, 'hover:bg-red-600': doneFetching, 'focus:bg-red-600': doneFetching, 
+                'border-red-700': doneFetching, 'bg-gray-500': !doneFetching, 'border-gray-700': !doneFetching
+             }">
+      {{ knoptekst }}
     </button>
   </div>
 </template>
