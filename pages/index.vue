@@ -50,12 +50,9 @@ onMounted(async () => {
             @click="startGame"
             class="active:mt-1 active:border-b-0 mb-20 text-white border-b-4 font-bold py-3 px-5 rounded-xl"
             :class="{
-                'bg-red-500': doneFetching,
-                'hover:bg-red-600': doneFetching,
-                'focus:bg-red-600': doneFetching,
-                'border-red-700': doneFetching,
-                'bg-gray-500': !doneFetching,
-                'border-gray-700': !doneFetching,
+                'bg-red-500 hover:bg-red-600 focus:bg-red-600 border-red-700':
+                    doneFetching,
+                'bg-gray-500 border-gray-700': !doneFetching,
             }"
         >
             {{ knoptekst }}
