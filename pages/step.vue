@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed } from 'vue';
 import { store } from '~/store/store.js';
-import { generateResult } from '~/utils/chatgpt.js';
+import { generateResult, generateContext } from '~/utils/chatgpt.js';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
@@ -23,8 +23,14 @@ async function nextStep() {
   if (currentStep.value == 5) {
     const result = await generateResult();
 
+    console.log(result, 'result');
+
     if (result) {
-      router.push('/result');
+      const result2 = await generateContext();
+      console.log(result2, 'result2');
+      if (result2) {
+        router.push('/result');
+      }
     }
   }
 }
@@ -44,7 +50,7 @@ const isLastStep = computed(() => currentStep.value === totalSteps);
       </div>
     </div>
     {{ currentStep }}
-    {{ store.questionsAndAnswers }}
+    {{ store }}
 
     <template v-if="currentStep < totalSteps">
       <div class="relative">
