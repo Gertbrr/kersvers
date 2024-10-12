@@ -2,14 +2,16 @@
 import { ref, computed } from 'vue';
 import { store } from '~/store/store.js';
 
-const currentStep = ref(1);
+const currentStep = ref(0);
 const totalSteps = 5;
 
 const questions = ref([]);
 
+const questionsAndAnswers = ref([]);
+
 onMounted(() => {
   // loadQuestions();
-  console.log(store.questionsAndAnswers);
+  questionsAndAnswers.value = store.questionsAndAnswers;
 });
 
 const loadQuestions = async () => {
@@ -40,60 +42,9 @@ const loadQuestions = async () => {
   }
 };
 
-const steps = [
-  {
-    question: 'Welke kleur voel je je?',
-    options: [
-      { id: 1, text: 'Rood' },
-      { id: 2, text: 'Blauw' },
-      { id: 3, text: 'Groen' },
-      { id: 4, text: 'Geel' },
-    ],
-  },
-  {
-    question: 'Wat is je favoriete seizoen?',
-    options: [
-      { id: 1, text: 'Lente' },
-      { id: 2, text: 'Zomer' },
-      { id: 3, text: 'Herfst' },
-      { id: 4, text: 'Winter' },
-    ],
-  },
-  {
-    question: 'Welk dier past het best bij jou?',
-    options: [
-      { id: 1, text: 'Leeuw' },
-      { id: 2, text: 'Dolfijn' },
-      { id: 3, text: 'Adelaar' },
-      { id: 4, text: 'Vlinder' },
-    ],
-  },
-  {
-    question: 'Wat is je favoriete vrijetijdsbesteding?',
-    options: [
-      { id: 1, text: 'Lezen' },
-      { id: 2, text: 'Sport' },
-      { id: 3, text: 'Koken' },
-      { id: 4, text: 'Reizen' },
-    ],
-  },
-  {
-    question: 'Welk element spreekt je het meest aan?',
-    options: [
-      { id: 1, text: 'Vuur' },
-      { id: 2, text: 'Water' },
-      { id: 3, text: 'Aarde' },
-      { id: 4, text: 'Lucht' },
-    ],
-  },
-];
-
-const currentQuestion = computed(() => steps[currentStep.value - 1]);
-
-const selectOption = (id) => {
-  // Handle option selection
-  console.log(`Step ${currentStep.value}, Selected option: ${id}`);
-  // You can store the answer here if needed
+const selectOption = (key) => {
+  questionsAndAnswers.value[currentStep.value].answer = key;
+  nextStep();
 };
 
 const nextStep = () => {
@@ -119,32 +70,32 @@ const isLastStep = computed(() => currentStep.value === totalSteps);
         ></div>
       </div>
     </div>
-
+    {{ questionsAndAnswers }}
     <div class="relative">
-      <!-- Main question card -->
       <div class="relative text-center mb-8 bg-white p-8 rounded-md shadow-lg">
-        <p class="mt-2">{{ currentStep }}/{{ totalSteps }}</p>
-        <h2 class="text-xl font-semibold">{{ currentQuestion.question }}</h2>
+        <p class="mt-2">{{ currentStep + 1 }}/{{ totalSteps }}</p>
+        <h2 class="text-xl font-semibold">{{ store.questionsAndAnswers[currentStep].question }}</h2>
       </div>
     </div>
+
     <div class="grid grid-cols-2 gap-4">
       <button
-        v-for="option in currentQuestion.options"
-        :key="option.id"
-        @click="selectOption(option.id)"
+        v-for="(option, index) in store.questionsAndAnswers[currentStep].options"
+        :key="option"
+        @click="selectOption(option)"
         class="bg-gray-200 hover:bg-gray-300 py-4 px-6 rounded transition duration-300"
       >
-        {{ option.text }}
+        {{ option }}
       </button>
     </div>
 
-    <div class="text-center mt-8">
+    <!-- <div class="text-center mt-8">
       <button
         @click="nextStep"
         class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition duration-300"
       >
         {{ isLastStep ? 'Voltooien' : 'Volgende' }}
       </button>
-    </div>
+    </div> -->
   </div>
 </template>
