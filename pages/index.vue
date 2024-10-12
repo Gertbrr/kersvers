@@ -24,7 +24,7 @@ const startGame = () => {
         </p>
         <button
             @click="startGame"
-            class="bg-red-500 hover:bg-red-600 focus:bg-red-600 mb-20 text-white border-b-4 border-red-700 font-bold py-3 px-5 rounded-xl"
+            class="bg-red-500 hover:bg-red-600 active:mt-1 active:border-b-0 focus:bg-red-600 mb-20 text-white border-b-4 border-red-700 font-bold py-3 px-5 rounded-xl"
         >
             Geef me een kersvers vers
         </button>
