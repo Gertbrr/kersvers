@@ -2,5 +2,7 @@
 import { reactive } from 'vue';
 
 export const store = reactive({
-  questionAndAnswers: [],
+  questionsAndAnswers: [],
+  bibleTexts: [],
+  results: null,
 });

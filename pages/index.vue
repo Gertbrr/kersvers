@@ -1,5 +1,6 @@
 <script setup>
 import { useRouter } from 'vue-router';
+import { generateQuizQuestions } from '~/utils/chatgpt.js';
 
 const router = useRouter();
 const { data, error } = await useFetch('/api/sampler');
@@ -11,7 +12,14 @@ const startGame = () => {
 };
 
 onMounted(async () => {
-  const bibleTexts = Object.values(data.value).map((entry) => entry.bibletext);
+  const bibleTexts = Object.values(data.value).map((entry) => {
+    return {
+      bibletext: entry.bibletext,
+      passageUrl: entry['passage-url'],
+    };
+  });
+
+  store.bibleTexts = bibleTexts;
 
   // const { test } = await useFetch('/api/chatgpt');
 

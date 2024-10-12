@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { store } from '~/store/store.js';
 
 export async function generateQuizQuestions(bibleTexts) {
   try {
@@ -26,7 +27,7 @@ export async function generateQuizQuestions(bibleTexts) {
 ## **Bible verses**
 Here are the 8 bible verse you can choose from:
 
-${JSON.stringify(bibleTexts)}
+${JSON.stringify(store.bibleTexts)}
 
 
 ## **Your task**
@@ -64,5 +65,63 @@ Make sure you adhere to this schema, because otherwise the preprocessing will br
     return JSON.parse(response.data.choices[0].message.content);
   } catch (error) {
     throw error;
+  }
+}
+
+export async function generateResult() {
+  try {
+    const runtimeConfig = useRuntimeConfig();
+
+    const API_KEY = '';
+    const API_URL = 'https://api.openai.com/v1/chat/completions';
+
+    const chatGPT = axios.create({
+      baseURL: API_URL,
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${API_KEY}`,
+      },
+    });
+
+    const response = await chatGPT.post('', {
+      model: 'gpt-4',
+      messages: [
+        {
+          role: 'system',
+          content: `You are a Dutch bible verse assistant! It is your job to give the user a fitting bible verse.
+
+## **Bible verses**
+Here are the 8 bible verse you can choose from:
+
+${JSON.stringify(store.bibleTexts)}
+
+
+## **Your task**
+In an earlier version the user has been asked the following:
+
+${store.questionsAndAnswers}
+
+Based on the given answers, you will have to choose one of the eight bible texts above. You will have to select the one that fits best and explain why you choose this one.
+
+## **Examples**
+
+The user choose Zwart ⚫ en Verdrietig 😭. From the eight options, the text from Johannes 1 fits best! It acknowledges darkness and sadness, but it also tells us of hope!
+
+
+## **Important guidelines**
+
+Give your output in json format like this.
+
+Give only the passageUrl value nothing else. No JSON. only one value`,
+        },
+      ],
+      temperature: 0.7,
+    });
+
+    store.results = response.data.choices[0].message.content;
+
+    return true;
+  } catch (e) {
+    //
   }
 }
