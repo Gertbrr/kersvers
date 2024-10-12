@@ -1,8 +1,44 @@
 <script setup>
 import { ref, computed } from 'vue';
+import { store } from '~/store/store.js';
 
 const currentStep = ref(1);
 const totalSteps = 5;
+
+const questions = ref([]);
+
+onMounted(() => {
+  // loadQuestions();
+  console.log(store.questionsAndAnswers);
+});
+
+const loadQuestions = async () => {
+  try {
+    const response = await fetch('/api/chatgpt', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        action: 'generateQuestions',
+        params: {
+          topic: 'World Capitals',
+          numberOfQuestions: 10,
+        },
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch questions');
+    }
+
+    questions.value = await response.json();
+    totalSteps.value = questions.value.length;
+  } catch (error) {
+    console.error('Error loading questions:', error);
+    // Handle error (e.g., show error message to user)
+  }
+};
 
 const steps = [
   {
@@ -82,13 +118,15 @@ const isLastStep = computed(() => currentStep.value === totalSteps);
           :style="{ width: `${(currentStep / totalSteps) * 100}%` }"
         ></div>
       </div>
-      <p class="mt-2">{{ currentStep }}/{{ totalSteps }}</p>
     </div>
 
-    <div class="text-center mb-8">
-      <h2 class="text-xl font-semibold">{{ currentQuestion.question }}</h2>
+    <div class="relative">
+      <!-- Main question card -->
+      <div class="relative text-center mb-8 bg-white p-8 rounded-md shadow-lg">
+        <p class="mt-2">{{ currentStep }}/{{ totalSteps }}</p>
+        <h2 class="text-xl font-semibold">{{ currentQuestion.question }}</h2>
+      </div>
     </div>
-
     <div class="grid grid-cols-2 gap-4">
       <button
         v-for="option in currentQuestion.options"
