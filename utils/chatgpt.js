@@ -2,20 +2,19 @@ import axios from 'axios';
 import { store } from '~/store/store.js';
 
 export async function generateQuizQuestions(bibleTexts) {
+  const {
+    public: { apiKeyOpenai },
+  } = useRuntimeConfig();
+  const API_URL = 'https://api.openai.com/v1/chat/completions';
+
+  const chatGPT = axios.create({
+    baseURL: API_URL,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${apiKeyOpenai}`,
+    },
+  });
   try {
-    const runtimeConfig = useRuntimeConfig();
-
-    const API_KEY = '';
-    const API_URL = 'https://api.openai.com/v1/chat/completions';
-
-    const chatGPT = axios.create({
-      baseURL: API_URL,
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${API_KEY}`,
-      },
-    });
-
     const response = await chatGPT.post('', {
       model: 'gpt-4',
       messages: [
@@ -70,16 +69,17 @@ Make sure you adhere to this schema, because otherwise the preprocessing will br
 
 export async function generateResult() {
   try {
-    const runtimeConfig = useRuntimeConfig();
+    const {
+      public: { apiKeyOpenai },
+    } = useRuntimeConfig();
 
-    const API_KEY = '';
     const API_URL = 'https://api.openai.com/v1/chat/completions';
 
     const chatGPT = axios.create({
       baseURL: API_URL,
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${API_KEY}`,
+        Authorization: `Bearer ${apiKeyOpenai}`,
       },
     });
 

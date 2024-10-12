@@ -21,8 +21,6 @@ onMounted(async () => {
 
   store.bibleTexts = bibleTexts;
 
-  // const { test } = await useFetch('/api/chatgpt');
-
   const result = await generateQuizQuestions(bibleTexts);
 
   store.questionsAndAnswers = result;
