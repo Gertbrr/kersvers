@@ -9,6 +9,13 @@ export default defineNuxtConfig({
       autoprefixer: {},
     },
   },
+  app: {
+    head: {
+      charset: "utf-8",
+      title: "KersVers",
+      viewport: "width=device-width, initial-scale=1",
+    },
+  },
   modules: ["@nuxtjs/google-fonts"],
   googleFonts: {
     families: {
