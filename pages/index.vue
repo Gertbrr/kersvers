@@ -37,12 +37,12 @@ onMounted(async () => {
         class="flex items-center justify-center gap-y-8 min-h-screen flex-col max-w-lg mx-auto text-center px-5"
     >
         <FruitBackground />
-        <img src="~/assets/logo.svg" class="max-w-full mr-12 mb-8" />
+        <img src="~/assets/logo.svg" class="max-w-full mr-6 lg:mr-12 lg:mb-8" />
         <p class="text-2xl font-bold">
             Kies uit 5 bijzondere dilemma's en krijg een kersvers Bijbelvers
             voorgeschoteld.
         </p>
-        <p class="text-xl">
+        <p class="text-lg lg:text-xl">
             Het zal je verbazen welk Bijbelvers aansluit bij jouw maffe keuzes
             en gekke voorkeuren. Klaar om appels met peren te vergelijken?
         </p>
