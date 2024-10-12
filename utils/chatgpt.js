@@ -1,25 +1,24 @@
-import axios from 'axios';
+import axios from "axios";
 
 export async function generateQuizQuestions(bibleTexts) {
+  const {
+    public: { apiKeyOpenai },
+  } = useRuntimeConfig();
+  const API_URL = "https://api.openai.com/v1/chat/completions";
+
+  const chatGPT = axios.create({
+    baseURL: API_URL,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${apiKeyOpenai}`,
+    },
+  });
   try {
-    const runtimeConfig = useRuntimeConfig();
-
-    const API_KEY = '';
-    const API_URL = 'https://api.openai.com/v1/chat/completions';
-
-    const chatGPT = axios.create({
-      baseURL: API_URL,
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${API_KEY}`,
-      },
-    });
-
-    const response = await chatGPT.post('', {
-      model: 'gpt-4',
+    const response = await chatGPT.post("", {
+      model: "gpt-4",
       messages: [
         {
-          role: 'system',
+          role: "system",
           content: `You are a Dutch bible verse assistant! It is your job to give the user a fitting bible verse.
 
 
