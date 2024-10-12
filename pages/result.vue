@@ -34,7 +34,7 @@ const showBible = ref(false);
     >
       <div v-show="showBible" class="shadow-xl bg-white rounded-t-3xl pt-5 px-5 pb-10 max-w-3xl mx-auto">
         <p class="text-lg">
-          {{ passage }}
+          {{ store.passage }}
         </p>
       </div>
     </transition>
