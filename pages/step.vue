@@ -66,7 +66,7 @@ const isLastStep = computed(() => currentStep.value === totalSteps);
                     ].options"
                     :key="option"
                     @click="selectOption(option)"
-                    class="transition duration-300 active:mt-1 active:border-b-0 text-white border-b-4 font-bold text-2xl py-8 px-6 rounded-xl"
+                    class="transition duration-300 active:mt-1 active:border-b-0 text-white border-b-4 font-bold text-lg lg:text-2xl py-8 px-6 rounded-xl"
                     :class="{
                         'bg-blue-500 hover:bg-blue-600 focus:bg-blue-600 border-blue-800':
                             index == 0,
