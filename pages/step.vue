@@ -10,7 +10,6 @@ const currentStep = ref(0);
 const totalSteps = 5;
 
 const selectOption = (key) => {
-    console.log(store);
     store.questionsAndAnswers[currentStep.value].answer = key;
     nextStep();
 };
@@ -23,19 +22,14 @@ async function nextStep() {
     if (currentStep.value == 5) {
         const result = await generateResult();
 
-        console.log(result, "result");
-
         if (result) {
             const result2 = await generateContext();
-            console.log(result2, "result2");
             if (result2) {
                 router.push("/result");
             }
         }
     }
 }
-
-const isLastStep = computed(() => currentStep.value === totalSteps);
 </script>
 
 <template>
@@ -49,21 +43,23 @@ const isLastStep = computed(() => currentStep.value === totalSteps);
                 <div
                     class="bg-blue-500 h-4 rounded-full transition-all duration-300"
                     :style="{
-                        width: `${((currentStep + 1) / totalSteps) * 100}%`,
+                        width: `${(currentStep / totalSteps) * 100}%`,
                     }"
                 ></div>
             </div>
         </div>
 
         <div class="relative">
-            <div
-                class="relative text-center mb-8 bg-white p-8 rounded-md shadow-lg"
-            >
-                <p class="mt-2">{{ currentStep + 1 }}/{{ totalSteps }}</p>
-                <h2 class="text-xl font-semibold">
-                    {{ store.questionsAndAnswers[currentStep].question }}
-                </h2>
-            </div>
+            <template v-if="currentStep < totalSteps">
+                <div
+                    class="relative text-center mb-8 bg-white p-8 rounded-md shadow-lg"
+                >
+                    <p class="mt-2">{{ currentStep + 1 }}/{{ totalSteps }}</p>
+                    <h2 class="text-xl font-semibold">
+                        {{ store.questionsAndAnswers[currentStep].question }}
+                    </h2>
+                </div>
+            </template>
 
             <template v-if="currentStep < totalSteps">
                 <div class="grid grid-cols-2 gap-4">
@@ -90,7 +86,13 @@ const isLastStep = computed(() => currentStep.value === totalSteps);
                 </div>
             </template>
 
-            <template v-else>Loading</template>
+            <template v-else>
+                <img
+                    src="https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExaTFyeDk3ZXJwNzkxNWF3bHdhZXQ1bTB2NjNydndmZnpvODRrOHc1dSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/7E8lI6TkLrvvAcPXso/giphy.gif"
+                    class="w-full max-w-80 rounded-xl mx-auto"
+                /><br />
+                Op weg naar jouw vers...
+            </template>
         </div>
     </div>
 </template>
